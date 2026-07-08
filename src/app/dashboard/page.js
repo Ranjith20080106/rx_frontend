@@ -27,7 +27,7 @@ export default function Dashboard() {
     // Report Output states
     const [report, setReport] = useState(null);
     const [dragOver, setDragOver] = useState(false);
-    
+
     const fileInputRef = useRef(null);
 
     // AI Resume Improvement states
@@ -210,9 +210,9 @@ export default function Dashboard() {
         try {
             const missingKeywords = report?.missing_keywords || [];
             const suggestions = report?.suggestions || [];
-            
+
             const result = await ApiService.improve(resumeText, missingKeywords, suggestions, jobDescription);
-            
+
             setOriginalText(result.original_text);
             setImprovedText(result.improved_text);
             setImprovedScore(result.improved_score);
@@ -230,7 +230,7 @@ export default function Dashboard() {
             displayToast("No improved text to download.");
             return;
         }
-        
+
         try {
             displayToast("Generating your formatted resume PDF...");
             let userName = "Candidate";
@@ -240,7 +240,7 @@ export default function Dashboard() {
             } catch (e) {
                 // Ignore profile fetch issues
             }
-            
+
             await ApiService.downloadImprovedPdf(improvedText, userName);
             displayToast("Resume PDF downloaded successfully!");
         } catch (e) {
@@ -272,7 +272,7 @@ export default function Dashboard() {
         <AppShell title="ATS Optimizer Dashboard">
             {showImprovementView ? (
                 /* Split-screen AI Optimizer Panel */
-                <div className="card" style={{ maxWidth: '1400px', margin: '0 auto', padding: '32px' }}>
+                <div className="card mobile-padding-card" style={{ maxWidth: '1400px', margin: '0 auto' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', borderBottom: '1px solid var(--border-color)', paddingBottom: '16px', flexWrap: 'wrap', gap: '16px' }}>
                         <div>
                             <h3 style={{ margin: 0 }}><i className="fa-solid fa-wand-magic-sparkles text-gradient"></i> AI Resume Optimizer</h3>
@@ -290,31 +290,31 @@ export default function Dashboard() {
                             </button>
                         </div>
                     </div>
-                    
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '28px' }}>
+
+                    <div className="responsive-two-column-grid">
                         {/* Left Column: Before */}
                         <div>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
                                 <span style={{ fontSize: '0.85rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-muted)' }}>Before (Original Resume)</span>
                             </div>
-                            <textarea 
-                                className="custom-textarea" 
-                                style={{ height: '520px', backgroundColor: 'rgba(106, 88, 62, 0.02)', cursor: 'not-allowed', opacity: 0.8 }} 
-                                value={originalText || report?.resume_text || "Original resume text not loaded."} 
+                            <textarea
+                                className="custom-textarea ai-editor-textarea"
+                                style={{ backgroundColor: 'rgba(106, 88, 62, 0.02)', cursor: 'not-allowed', opacity: 0.8 }}
+                                value={originalText || report?.resume_text || "Original resume text not loaded."}
                                 readOnly
                             ></textarea>
                         </div>
-                        
+
                         {/* Right Column: After */}
                         <div>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
                                 <span style={{ fontSize: '0.85rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--success-accent)' }}>After (AI Suggestions - Editable)</span>
                                 <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}><i className="fa-solid fa-pen"></i> Tweak & edit directly</span>
                             </div>
-                            <textarea 
-                                className="custom-textarea" 
-                                style={{ height: '520px', borderColor: 'var(--success-accent)' }} 
-                                value={improvedText} 
+                            <textarea
+                                className="custom-textarea ai-editor-textarea"
+                                style={{ borderColor: 'var(--success-accent)' }}
+                                value={improvedText}
                                 onChange={(e) => setImprovedText(e.target.value)}
                             ></textarea>
                         </div>
@@ -323,363 +323,363 @@ export default function Dashboard() {
             ) : (
                 <>
                     <div className="dashboard-grid">
-                
-                {/* Left Column: Inputs */}
-                <div className="input-pane-column">
-                    <div className="card">
-                        <h3><i className="fa-solid fa-cloud-arrow-up text-gradient"></i> 1. Upload Your Resume</h3>
-                        <p className="card-desc">Drag & drop or select a PDF or DOCX file. The system will extract text automatically.</p>
-                        
-                        {/* File Drag Box */}
-                        {!selectedFile ? (
-                            <div 
-                                className={`uploader-box ${dragOver ? 'dragover' : ''}`} 
-                                id="drop-zone"
-                                onClick={() => fileInputRef.current.click()}
-                                onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
-                                onDragLeave={() => setDragOver(false)}
-                                onDrop={(e) => {
-                                    e.preventDefault();
-                                    setDragOver(false);
-                                    handleFileSelection(e.dataTransfer.files[0]);
-                                }}
-                            >
-                                <i className="fa-regular fa-file-pdf uploader-icon"></i>
-                                <span className="uploader-title">Drag & Drop Resume File Here</span>
-                                <span className="uploader-subtitle">Supports PDF, DOCX, or TXT (Max 5MB)</span>
-                                <span className="action-btn secondary-btn" style={{ height: '34px' }}>Select File</span>
-                                <input 
-                                    type="file" 
-                                    ref={fileInputRef}
-                                    style={{ display: 'none' }} 
-                                    accept=".pdf,.docx,.txt"
-                                    onChange={handleFileChange}
-                                />
+
+                        {/* Left Column: Inputs */}
+                        <div className="input-pane-column">
+                            <div className="card">
+                                <h3><i className="fa-solid fa-cloud-arrow-up text-gradient"></i> 1. Upload Your Resume</h3>
+                                <p className="card-desc">Drag & drop or select a PDF or DOCX file. The system will extract text automatically.</p>
+
+                                {/* File Drag Box */}
+                                {!selectedFile ? (
+                                    <div
+                                        className={`uploader-box ${dragOver ? 'dragover' : ''}`}
+                                        id="drop-zone"
+                                        onClick={() => fileInputRef.current.click()}
+                                        onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+                                        onDragLeave={() => setDragOver(false)}
+                                        onDrop={(e) => {
+                                            e.preventDefault();
+                                            setDragOver(false);
+                                            handleFileSelection(e.dataTransfer.files[0]);
+                                        }}
+                                    >
+                                        <i className="fa-regular fa-file-pdf uploader-icon"></i>
+                                        <span className="uploader-title">Drag & Drop Resume File Here</span>
+                                        <span className="uploader-subtitle">Supports PDF, DOCX, or TXT (Max 5MB)</span>
+                                        <span className="action-btn secondary-btn" style={{ height: '34px' }}>Select File</span>
+                                        <input
+                                            type="file"
+                                            ref={fileInputRef}
+                                            style={{ display: 'none' }}
+                                            accept=".pdf,.docx,.txt"
+                                            onChange={handleFileChange}
+                                        />
+                                    </div>
+                                ) : (
+                                    /* Selected File Indicator */
+                                    <div id="selected-file-indicator" style={{ textAlign: 'center' }}>
+                                        <div className="file-pill" id="file-pill-element">
+                                            <i className="fa-regular fa-file-lines"></i>
+                                            <span id="file-name-text">{selectedFile.name}</span>
+                                            <i className="fa-solid fa-circle-xmark" id="btn-remove-file" title="Remove File" onClick={removeFile}></i>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
-                        ) : (
-                            /* Selected File Indicator */
-                            <div id="selected-file-indicator" style={{ textAlign: 'center' }}>
-                                <div className="file-pill" id="file-pill-element">
-                                    <i className="fa-regular fa-file-lines"></i>
-                                    <span id="file-name-text">{selectedFile.name}</span>
-                                    <i className="fa-solid fa-circle-xmark" id="btn-remove-file" title="Remove File" onClick={removeFile}></i>
+
+                            <div className="card">
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                                    <h3><i className="fa-solid fa-briefcase text-gradient"></i> 2. Target Job Description</h3>
+                                </div>
+                                <p className="card-desc">Select a target IT role from the dropdown below to load its Job Description, or manually paste yours.</p>
+
+                                <div style={{ marginBottom: '16px' }}>
+                                    <div className="select-wrapper">
+                                        <select
+                                            id="select-job-role"
+                                            className="custom-select"
+                                            value={selectedRole}
+                                            onChange={handleRoleChange}
+                                        >
+                                            <option value="" disabled>-- Choose target IT role --</option>
+                                            {Object.keys(JOBS_DATA).sort().map(role => (
+                                                <option key={role} value={role}>{role}</option>
+                                            ))}
+                                        </select>
+                                        <i className="fa-solid fa-chevron-down select-icon"></i>
+                                    </div>
+                                </div>
+
+                                <div className="textarea-group">
+                                    <textarea
+                                        id="job-description-input"
+                                        className="custom-textarea"
+                                        placeholder="Paste target requirements here..."
+                                        value={jobDescription}
+                                        onChange={(e) => setJobDescription(e.target.value)}
+                                    ></textarea>
+                                    <div className="textarea-footer" style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '4px' }}>
+                                        <span id="jd-word-count">Words: {wordCount}</span>
+                                        <span id="jd-char-count">{charCount} / 4000 characters</span>
+                                    </div>
                                 </div>
                             </div>
-                        )}
-                    </div>
 
-                    <div className="card">
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                            <h3><i className="fa-solid fa-briefcase text-gradient"></i> 2. Target Job Description</h3>
-                        </div>
-                        <p className="card-desc">Select a target IT role from the dropdown below to load its Job Description, or manually paste yours.</p>
-                        
-                        <div style={{ marginBottom: '16px' }}>
-                            <div className="select-wrapper">
-                                <select 
-                                    id="select-job-role" 
-                                    className="custom-select"
-                                    value={selectedRole}
-                                    onChange={handleRoleChange}
+                            {/* Actions bar */}
+                            <div style={{ marginBottom: '28px' }}>
+                                <button
+                                    className="action-btn primary-btn"
+                                    id="btn-submit-analysis"
+                                    style={{ width: '100%', height: '50px', fontSize: '1.05rem' }}
+                                    onClick={handleSubmitAnalysis}
+                                    disabled={isAnalyzing}
                                 >
-                                    <option value="" disabled>-- Choose target IT role --</option>
-                                    {Object.keys(JOBS_DATA).sort().map(role => (
-                                        <option key={role} value={role}>{role}</option>
-                                    ))}
-                                </select>
-                                <i className="fa-solid fa-chevron-down select-icon"></i>
-                            </div>
-                        </div>
-                        
-                        <div className="textarea-group">
-                            <textarea 
-                                id="job-description-input" 
-                                className="custom-textarea" 
-                                placeholder="Paste target requirements here..."
-                                value={jobDescription}
-                                onChange={(e) => setJobDescription(e.target.value)}
-                            ></textarea>
-                            <div className="textarea-footer" style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '4px' }}>
-                                <span id="jd-word-count">Words: {wordCount}</span>
-                                <span id="jd-char-count">{charCount} / 4000 characters</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Actions bar */}
-                    <div style={{ marginBottom: '28px' }}>
-                        <button 
-                            className="action-btn primary-btn" 
-                            id="btn-submit-analysis" 
-                            style={{ width: '100%', height: '50px', fontSize: '1.05rem' }}
-                            onClick={handleSubmitAnalysis}
-                            disabled={isAnalyzing}
-                        >
-                            {isAnalyzing ? (
-                                <><i className="fa-solid fa-circle-notch fa-spin"></i> Analyzing Match Factors...</>
-                            ) : (
-                                <><i className="fa-solid fa-wand-magic-sparkles"></i> Optimize Resume & Analyze Match</>
-                            )}
-                        </button>
-                    </div>
-                </div>
-
-                {/* Right Column: Initial Guidelines & Loading States */}
-                <div className="results-pane-column">
-                    {!report && !isAnalyzing && (
-                        <div className="card" id="empty-state-card" style={{ textAlign: 'center', padding: '60px 30px' }}>
-                            <i className="fa-solid fa-file-shield" style={{ fontSize: '3.5rem', color: 'var(--text-muted)', marginBottom: '20px' }}></i>
-                            <h3>Analysis Results Blueprint</h3>
-                            <p className="card-desc" style={{ maxWidth: '320px', margin: '0 auto' }}>Upload your resume and paste a target job description on the left. The AI scoring breakdown, gap evaluations, and ATS recommendations will appear here.</p>
-                        </div>
-                    )}
-
-                    {isAnalyzing && (
-                        <div className="card" id="loading-state-card" style={{ textAlign: 'center', padding: '80px 30px' }}>
-                            <i className="fa-solid fa-circle-notch fa-spin" style={{ fontSize: '3.5rem', color: 'var(--primary-glow)', marginBottom: '20px' }}></i>
-                            <h3>Extracting & Matching Profile...</h3>
-                            <p className="card-desc" style={{ maxWidth: '320px', margin: '0 auto' }}>Advanced sentence embedding models are tokenizing your skills and calculating weighted cosine alignment scores.</p>
-                        </div>
-                    )}
-
-                    {/* ATS REPORT OUTPUT CONTAINER */}
-                    {report && (
-                        <div id="analysis-report-container">
-                            {/* Primary Circle Score */}
-                            <div className="card score-circle-card" style={{ textAlign: 'center' }}>
-                                <h3>ATS Compatibility</h3>
-                                <div className="score-circle-wrapper">
-                                    <div className="score-progress-ring">
-                                        <svg width="140" height="140">
-                                            <circle stroke="#1e293d" strokeWidth="10" fill="transparent" r="60" cx="70" cy="70"/>
-                                            <circle 
-                                                id="ats-progress-ring" 
-                                                stroke={progressStrokeColor} 
-                                                strokeWidth="10" 
-                                                strokeDasharray={circumference} 
-                                                strokeDashoffset={strokeDashoffset} 
-                                                fill="transparent" 
-                                                r="60" 
-                                                cx="70" 
-                                                cy="70" 
-                                                className="progress-ring-circle"
-                                                style={{ transition: 'stroke-dashoffset 0.8s ease' }}
-                                            />
-                                        </svg>
-                                        <div className="score-value-text" id="ats-score-display">{score}</div>
-                                    </div>
-                                    <div className={`score-badge ${scoreBadgeClass}`} id="ats-badge-display">{scoreBadgeText}</div>
-                                </div>
-                                <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', flexWrap: 'wrap' }}>
-                                    <button className="action-btn secondary-btn" id="btn-download-pdf-report" onClick={downloadPdfReport} style={{ height: '38px' }}>
-                                        <i className="fa-solid fa-file-pdf"></i> Download PDF
-                                    </button>
-                                    <button className="action-btn primary-btn" id="btn-improve-resume" onClick={handleImproveResumeClick} style={{ height: '38px' }}>
-                                        <i className="fa-solid fa-wand-magic-sparkles"></i> Improve Resume
-                                    </button>
-                                </div>
-                            </div>
-
-                            {/* Integrity Checklist */}
-                            <div className="card">
-                                <h3>ATS formatting check</h3>
-                                <ul className="icon-list" id="format-checklist-display">
-                                    <li>
-                                        {report.format_check?.has_contact_info ? (
-                                            <i className="fa-solid fa-circle-check list-icon-check"></i>
-                                        ) : (
-                                            <i className="fa-solid fa-circle-xmark list-icon-times"></i>
-                                        )}
-                                        <span>Contact Details Identified</span>
-                                    </li>
-                                    <li>
-                                        {report.format_check?.has_summary ? (
-                                            <i className="fa-solid fa-circle-check list-icon-check"></i>
-                                        ) : (
-                                            <i className="fa-solid fa-circle-xmark list-icon-times"></i>
-                                        )}
-                                        <span>Professional Summary Present</span>
-                                    </li>
-                                    <li>
-                                        {report.format_check?.has_experience ? (
-                                            <i className="fa-solid fa-circle-check list-icon-check"></i>
-                                        ) : (
-                                            <i className="fa-solid fa-circle-xmark list-icon-times"></i>
-                                        )}
-                                        <span>Experience Details Validated</span>
-                                    </li>
-                                    <li>
-                                        {report.format_check?.has_education ? (
-                                            <i className="fa-solid fa-circle-check list-icon-check"></i>
-                                        ) : (
-                                            <i className="fa-solid fa-circle-xmark list-icon-times"></i>
-                                        )}
-                                        <span>Education Framework Found</span>
-                                    </li>
-                                    <li>
-                                        {report.format_check?.is_length_optimal ? (
-                                            <i className="fa-solid fa-circle-check list-icon-check"></i>
-                                        ) : (
-                                            <i className="fa-solid fa-circle-xmark list-icon-times"></i>
-                                        )}
-                                        <span>Optimal Resume Length</span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    )}
-                </div>
-            </div>
-
-            {/* BOTTOM GRID ROW FOR EXPANDED ANALYSIS */}
-            {report && (
-                <div id="expanded-analysis-row" style={{ maxWidth: '1400px', margin: '0 auto', marginTop: '28px' }}>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '28px' }}>
-                        
-                        {/* Col 1: Keywords and recommendations */}
-                        <div>
-                            {/* Score breakdown Table */}
-                            <div className="card">
-                                <h3>Weighted Score Details</h3>
-                                <table className="optimizations-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Evaluation Criteria</th>
-                                            <th>Weight</th>
-                                            <th>Result Score</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="score-breakdown-rows">
-                                        <tr>
-                                            <td style={{ fontWeight: 500 }}>Skills Matching Index</td>
-                                            <td>40%</td>
-                                            <td style={{ fontWeight: 700, color: 'var(--primary-glow)' }}>{report.scores_breakdown?.skills_match || 0}%</td>
-                                        </tr>
-                                        <tr>
-                                            <td style={{ fontWeight: 500 }}>Experience Alignment</td>
-                                            <td>30%</td>
-                                            <td style={{ fontWeight: 700, color: 'var(--primary-glow)' }}>{report.scores_breakdown?.experience_match || 0}%</td>
-                                        </tr>
-                                        <tr>
-                                            <td style={{ fontWeight: 500 }}>Keyword Synonyms Overlap</td>
-                                            <td>20%</td>
-                                            <td style={{ fontWeight: 700, color: 'var(--primary-glow)' }}>{report.scores_breakdown?.keyword_match || 0}%</td>
-                                        </tr>
-                                        <tr>
-                                            <td style={{ fontWeight: 500 }}>Degree & Education Match</td>
-                                            <td>10%</td>
-                                            <td style={{ fontWeight: 700, color: 'var(--primary-glow)' }}>{report.scores_breakdown?.education_match || 0}%</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            {/* Suggestions */}
-                            <div className="card">
-                                <h3>Actionable Resume Improvements</h3>
-                                <ul className="icon-list" id="suggestions-list-display">
-                                    {report.suggestions && report.suggestions.length > 0 ? (
-                                        report.suggestions.map((s, idx) => (
-                                            <li key={idx}>
-                                                <i className="fa-solid fa-circle-dot list-icon-bullet"></i>
-                                                <span>{s}</span>
-                                            </li>
-                                        ))
+                                    {isAnalyzing ? (
+                                        <><i className="fa-solid fa-circle-notch fa-spin"></i> Analyzing Match Factors...</>
                                     ) : (
-                                        <li>
-                                            <i className="fa-solid fa-circle-check list-icon-check"></i>
-                                            <span>Perfect score! No formatting adjustments recommended.</span>
-                                        </li>
+                                        <><i className="fa-solid fa-wand-magic-sparkles"></i> Optimize Resume & Analyze Match</>
                                     )}
-                                </ul>
-                            </div>
-
-                            {/* Keyword Optimizations */}
-                            <div className="card">
-                                <h3>Keyword Gap Optimizer</h3>
-                                <table className="optimizations-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Missing Keyword</th>
-                                            <th>Status</th>
-                                            <th>Fix Recommendation</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="keyword-optimizations-rows">
-                                        {report.keyword_optimizations && report.keyword_optimizations.length > 0 ? (
-                                            report.keyword_optimizations.map((opt, idx) => (
-                                                <tr key={idx}>
-                                                    <td style={{ fontFamily: 'var(--font-heading)', fontWeight: 700 }}>{opt.keyword}</td>
-                                                    <td>
-                                                        <span className={`badge-tag ${opt.status === 'Matched' ? 'match' : 'missing'}`}>
-                                                            {opt.status}
-                                                        </span>
-                                                    </td>
-                                                    <td style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{opt.fix}</td>
-                                                </tr>
-                                            ))
-                                        ) : (
-                                            <tr>
-                                                <td colSpan="3" style={{ textAlign: 'center', color: 'var(--text-muted)' }}>
-                                                    No keyword optimization gaps identified.
-                                                </td>
-                                            </tr>
-                                        )}
-                                    </tbody>
-                                </table>
+                                </button>
                             </div>
                         </div>
 
-                        {/* Col 2: Skills tags & Generative cover letter */}
-                        <div>
-                            {/* Skills Tags */}
-                            <div className="card">
-                                <h3>Discovered Skill Competencies</h3>
-                                <div style={{ marginBottom: '15px' }}>
-                                    <h4 className="uploader-subtitle" style={{ marginBottom: '6px', transform: 'uppercase', fontWeight: 700 }}>Matched Skills</h4>
-                                    <div className="keywords-badges-container" id="matched-skills-tags">
-                                        {report.matched_skills && report.matched_skills.length > 0 ? (
-                                            report.matched_skills.map((skill, idx) => (
-                                                <span key={idx} className="badge-tag match">{skill}</span>
-                                            ))
-                                        ) : (
-                                            <span className="uploader-subtitle">No matching skills detected.</span>
-                                        )}
-                                    </div>
+                        {/* Right Column: Initial Guidelines & Loading States */}
+                        <div className="results-pane-column">
+                            {!report && !isAnalyzing && (
+                                <div className="card" id="empty-state-card" style={{ textAlign: 'center', padding: '60px 30px' }}>
+                                    <i className="fa-solid fa-file-shield" style={{ fontSize: '3.5rem', color: 'var(--text-muted)', marginBottom: '20px' }}></i>
+                                    <h3>Analysis Results Blueprint</h3>
+                                    <p className="card-desc" style={{ maxWidth: '320px', margin: '0 auto' }}>Upload your resume and paste a target job description on the left. The AI scoring breakdown, gap evaluations, and ATS recommendations will appear here.</p>
                                 </div>
-                                <div>
-                                    <h4 className="uploader-subtitle" style={{ marginBottom: '6px', transform: 'uppercase', fontWeight: 700 }}>Missing Job Keywords</h4>
-                                    <div className="keywords-badges-container" id="missing-skills-tags">
-                                        {report.missing_keywords && report.missing_keywords.length > 0 ? (
-                                            report.missing_keywords.map((skill, idx) => (
-                                                <span key={idx} className="badge-tag missing">{skill}</span>
-                                            ))
-                                        ) : (
-                                            <span className="uploader-subtitle" style={{ color: 'var(--success-accent)', fontWeight: 700 }}>
-                                                <i className="fa-solid fa-circle-check"></i> 100% Core Skill Match!
-                                            </span>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
+                            )}
 
-                            {/* Cover Letter */}
-                            <div className="card">
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-                                    <h3 style={{ marginBottom: 0 }}><i className="fa-solid fa-pen-nib text-gradient"></i> Generative AI Cover Letter</h3>
-                                    <button className="panel-action-btn" id="btn-copy-cover-letter" onClick={copyCoverLetter} style={{ padding: '4px 10px', backgroundColor: 'var(--card-bg)', borderRadius: '6px', border: '1px solid var(--border-color)', cursor: 'pointer' }}>
-                                        <i className="fa-regular fa-copy"></i> Copy Letter
-                                    </button>
+                            {isAnalyzing && (
+                                <div className="card" id="loading-state-card" style={{ textAlign: 'center', padding: '80px 30px' }}>
+                                    <i className="fa-solid fa-circle-notch fa-spin" style={{ fontSize: '3.5rem', color: 'var(--primary-glow)', marginBottom: '20px' }}></i>
+                                    <h3>Extracting & Matching Profile...</h3>
+                                    <p className="card-desc" style={{ maxWidth: '320px', margin: '0 auto' }}>Advanced sentence embedding models are tokenizing your skills and calculating weighted cosine alignment scores.</p>
                                 </div>
-                                <p className="card-desc">AI-generated cover letter based on your matched resume experiences and targeted job description coordinates.</p>
-                                <div className="cover-letter-preview" id="cover-letter-text">
-                                    {report.ai_cover_letter || 'Cover letter details not generated.'}
+                            )}
+
+                            {/* ATS REPORT OUTPUT CONTAINER */}
+                            {report && (
+                                <div id="analysis-report-container">
+                                    {/* Primary Circle Score */}
+                                    <div className="card score-circle-card" style={{ textAlign: 'center' }}>
+                                        <h3>ATS Compatibility</h3>
+                                        <div className="score-circle-wrapper">
+                                            <div className="score-progress-ring">
+                                                <svg width="140" height="140">
+                                                    <circle stroke="#1e293d" strokeWidth="10" fill="transparent" r="60" cx="70" cy="70" />
+                                                    <circle
+                                                        id="ats-progress-ring"
+                                                        stroke={progressStrokeColor}
+                                                        strokeWidth="10"
+                                                        strokeDasharray={circumference}
+                                                        strokeDashoffset={strokeDashoffset}
+                                                        fill="transparent"
+                                                        r="60"
+                                                        cx="70"
+                                                        cy="70"
+                                                        className="progress-ring-circle"
+                                                        style={{ transition: 'stroke-dashoffset 0.8s ease' }}
+                                                    />
+                                                </svg>
+                                                <div className="score-value-text" id="ats-score-display">{score}</div>
+                                            </div>
+                                            <div className={`score-badge ${scoreBadgeClass}`} id="ats-badge-display">{scoreBadgeText}</div>
+                                        </div>
+                                        <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                                            <button className="action-btn secondary-btn" id="btn-download-pdf-report" onClick={downloadPdfReport} style={{ height: '38px' }}>
+                                                <i className="fa-solid fa-file-pdf"></i> Download PDF
+                                            </button>
+                                            <button className="action-btn primary-btn" id="btn-improve-resume" onClick={handleImproveResumeClick} style={{ height: '38px' }}>
+                                                <i className="fa-solid fa-wand-magic-sparkles"></i> Improve Resume
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {/* Integrity Checklist */}
+                                    <div className="card">
+                                        <h3>ATS formatting check</h3>
+                                        <ul className="icon-list" id="format-checklist-display">
+                                            <li>
+                                                {report.format_check?.has_contact_info ? (
+                                                    <i className="fa-solid fa-circle-check list-icon-check"></i>
+                                                ) : (
+                                                    <i className="fa-solid fa-circle-xmark list-icon-times"></i>
+                                                )}
+                                                <span>Contact Details Identified</span>
+                                            </li>
+                                            <li>
+                                                {report.format_check?.has_summary ? (
+                                                    <i className="fa-solid fa-circle-check list-icon-check"></i>
+                                                ) : (
+                                                    <i className="fa-solid fa-circle-xmark list-icon-times"></i>
+                                                )}
+                                                <span>Professional Summary Present</span>
+                                            </li>
+                                            <li>
+                                                {report.format_check?.has_experience ? (
+                                                    <i className="fa-solid fa-circle-check list-icon-check"></i>
+                                                ) : (
+                                                    <i className="fa-solid fa-circle-xmark list-icon-times"></i>
+                                                )}
+                                                <span>Experience Details Validated</span>
+                                            </li>
+                                            <li>
+                                                {report.format_check?.has_education ? (
+                                                    <i className="fa-solid fa-circle-check list-icon-check"></i>
+                                                ) : (
+                                                    <i className="fa-solid fa-circle-xmark list-icon-times"></i>
+                                                )}
+                                                <span>Education Framework Found</span>
+                                            </li>
+                                            <li>
+                                                {report.format_check?.is_length_optimal ? (
+                                                    <i className="fa-solid fa-circle-check list-icon-check"></i>
+                                                ) : (
+                                                    <i className="fa-solid fa-circle-xmark list-icon-times"></i>
+                                                )}
+                                                <span>Optimal Resume Length</span>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
-                            </div>
+                            )}
                         </div>
                     </div>
-                </div>
-            )}
+
+                    {/* BOTTOM GRID ROW FOR EXPANDED ANALYSIS */}
+                    {report && (
+                        <div id="expanded-analysis-row" style={{ maxWidth: '1400px', margin: '0 auto', marginTop: '28px' }}>
+                            <div className="responsive-two-column-grid">
+
+                                {/* Col 1: Keywords and recommendations */}
+                                <div>
+                                    {/* Score breakdown Table */}
+                                    <div className="card">
+                                        <h3>Weighted Score Details</h3>
+                                        <table className="optimizations-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Evaluation Criteria</th>
+                                                    <th>Weight</th>
+                                                    <th>Result Score</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="score-breakdown-rows">
+                                                <tr>
+                                                    <td style={{ fontWeight: 500 }}>Skills Matching Index</td>
+                                                    <td>40%</td>
+                                                    <td style={{ fontWeight: 700, color: 'var(--primary-glow)' }}>{report.scores_breakdown?.skills_match || 0}%</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style={{ fontWeight: 500 }}>Experience Alignment</td>
+                                                    <td>30%</td>
+                                                    <td style={{ fontWeight: 700, color: 'var(--primary-glow)' }}>{report.scores_breakdown?.experience_match || 0}%</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style={{ fontWeight: 500 }}>Keyword Synonyms Overlap</td>
+                                                    <td>20%</td>
+                                                    <td style={{ fontWeight: 700, color: 'var(--primary-glow)' }}>{report.scores_breakdown?.keyword_match || 0}%</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style={{ fontWeight: 500 }}>Degree & Education Match</td>
+                                                    <td>10%</td>
+                                                    <td style={{ fontWeight: 700, color: 'var(--primary-glow)' }}>{report.scores_breakdown?.education_match || 0}%</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    {/* Suggestions */}
+                                    <div className="card">
+                                        <h3>Actionable Resume Improvements</h3>
+                                        <ul className="icon-list" id="suggestions-list-display">
+                                            {report.suggestions && report.suggestions.length > 0 ? (
+                                                report.suggestions.map((s, idx) => (
+                                                    <li key={idx}>
+                                                        <i className="fa-solid fa-circle-dot list-icon-bullet"></i>
+                                                        <span>{s}</span>
+                                                    </li>
+                                                ))
+                                            ) : (
+                                                <li>
+                                                    <i className="fa-solid fa-circle-check list-icon-check"></i>
+                                                    <span>Perfect score! No formatting adjustments recommended.</span>
+                                                </li>
+                                            )}
+                                        </ul>
+                                    </div>
+
+                                    {/* Keyword Optimizations */}
+                                    <div className="card">
+                                        <h3>Keyword Gap Optimizer</h3>
+                                        <table className="optimizations-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Missing Keyword</th>
+                                                    <th>Status</th>
+                                                    <th>Fix Recommendation</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="keyword-optimizations-rows">
+                                                {report.keyword_optimizations && report.keyword_optimizations.length > 0 ? (
+                                                    report.keyword_optimizations.map((opt, idx) => (
+                                                        <tr key={idx}>
+                                                            <td style={{ fontFamily: 'var(--font-heading)', fontWeight: 700 }}>{opt.keyword}</td>
+                                                            <td>
+                                                                <span className={`badge-tag ${opt.status === 'Matched' ? 'match' : 'missing'}`}>
+                                                                    {opt.status}
+                                                                </span>
+                                                            </td>
+                                                            <td style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{opt.fix}</td>
+                                                        </tr>
+                                                    ))
+                                                ) : (
+                                                    <tr>
+                                                        <td colSpan="3" style={{ textAlign: 'center', color: 'var(--text-muted)' }}>
+                                                            No keyword optimization gaps identified.
+                                                        </td>
+                                                    </tr>
+                                                )}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                {/* Col 2: Skills tags & Generative cover letter */}
+                                <div>
+                                    {/* Skills Tags */}
+                                    <div className="card">
+                                        <h3>Discovered Skill Competencies</h3>
+                                        <div style={{ marginBottom: '15px' }}>
+                                            <h4 className="uploader-subtitle" style={{ marginBottom: '6px', transform: 'uppercase', fontWeight: 700 }}>Matched Skills</h4>
+                                            <div className="keywords-badges-container" id="matched-skills-tags">
+                                                {report.matched_skills && report.matched_skills.length > 0 ? (
+                                                    report.matched_skills.map((skill, idx) => (
+                                                        <span key={idx} className="badge-tag match">{skill}</span>
+                                                    ))
+                                                ) : (
+                                                    <span className="uploader-subtitle">No matching skills detected.</span>
+                                                )}
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <h4 className="uploader-subtitle" style={{ marginBottom: '6px', transform: 'uppercase', fontWeight: 700 }}>Missing Job Keywords</h4>
+                                            <div className="keywords-badges-container" id="missing-skills-tags">
+                                                {report.missing_keywords && report.missing_keywords.length > 0 ? (
+                                                    report.missing_keywords.map((skill, idx) => (
+                                                        <span key={idx} className="badge-tag missing">{skill}</span>
+                                                    ))
+                                                ) : (
+                                                    <span className="uploader-subtitle" style={{ color: 'var(--success-accent)', fontWeight: 700 }}>
+                                                        <i className="fa-solid fa-circle-check"></i> 100% Core Skill Match!
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Cover Letter */}
+                                    <div className="card">
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+                                            <h3 style={{ marginBottom: 0 }}><i className="fa-solid fa-pen-nib text-gradient"></i> Generative AI Cover Letter</h3>
+                                            <button className="panel-action-btn" id="btn-copy-cover-letter" onClick={copyCoverLetter} style={{ padding: '4px 10px', backgroundColor: 'var(--card-bg)', borderRadius: '6px', border: '1px solid var(--border-color)', cursor: 'pointer' }}>
+                                                <i className="fa-regular fa-copy"></i> Copy Letter
+                                            </button>
+                                        </div>
+                                        <p className="card-desc">AI-generated cover letter based on your matched resume experiences and targeted job description coordinates.</p>
+                                        <div className="cover-letter-preview" id="cover-letter-text">
+                                            {report.ai_cover_letter || 'Cover letter details not generated.'}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </>
             )}
 

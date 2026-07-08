@@ -38,7 +38,7 @@ export default function PaymentPage() {
 
     return (
         <AppShell title="Secure Checkout">
-            <div className="card" style={{ maxWidth: '600px', margin: '0 auto', padding: '40px' }}>
+            <div className="card mobile-padding-card" style={{ maxWidth: '600px', margin: '0 auto' }}>
                 <h3 style={{ textAlign: 'center', marginBottom: '8px' }}>
                     <i className="fa-solid fa-credit-card text-gradient"></i> UPI Payment Gateway
                 </h3>

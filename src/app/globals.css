@@ -502,6 +502,16 @@ body::before {
     border-color: var(--text-primary);
 }
 
+.ai-editor-textarea {
+    height: 520px;
+}
+
+@media (max-width: 768px) {
+    .ai-editor-textarea {
+        height: 320px !important;
+    }
+}
+
 /* --- Custom Select dropdown elements --- */
 .select-wrapper {
     position: relative;
@@ -702,6 +712,13 @@ body::before {
     padding: 40px;
 }
 
+@media (max-width: 480px) {
+    .auth-card {
+        padding: 24px 20px;
+        margin: 16px;
+    }
+}
+
 .auth-header {
     text-align: center;
     margin-bottom: 28px;
@@ -890,102 +907,182 @@ body::before {
 /* ==========================================================================
    RESPONSIVE DESIGN RULES
    ========================================================================== */
+
+/* --- Responsive Utilities --- */
+.responsive-two-column-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+}
+
 @media (max-width: 1024px) {
-    .dashboard-grid {
+    .responsive-two-column-grid {
         grid-template-columns: 1fr;
         gap: 20px;
     }
-    
-    .app-shell {
+}
+
+.profile-header-card {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 32px;
+}
+
+@media (max-width: 768px) {
+    .profile-header-card {
         flex-direction: column;
+        text-align: center;
+        padding: 24px 16px;
     }
-    
-    .app-sidebar {
-        width: 100%;
-        height: auto;
-        border-right: none;
-        border-bottom: 1px solid var(--border-color);
+    .profile-header-card .user-avatar {
+        margin: 0 auto;
+    }
+}
+
+.mobile-padding-card {
+    padding: 40px;
+}
+
+@media (max-width: 768px) {
+    .mobile-padding-card {
+        padding: 20px !important;
+    }
+}
+
+/* Landing Page Grid & Footer */
+.landing-features-grid {
+    max-width: 1200px;
+    margin: -40px auto 80px auto;
+    padding: 0 24px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+    width: 100%;
+}
+
+.landing-footer {
+    text-align: center;
+    padding: 40px;
+    border-top: 1px solid var(--border-color);
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    background-color: var(--sidebar-bg);
+    margin-top: auto;
+}
+
+/* Landing Page Responsiveness */
+@media (max-width: 768px) {
+    .landing-features-grid {
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        margin: 20px auto 60px auto;
+        padding: 0 16px;
+        gap: 16px;
+    }
+    .landing-footer {
+        padding: 24px 16px;
+    }
+    .landing-navbar {
+        padding: 0 16px !important;
+    }
+    .landing-navbar .navbar-controls {
+        gap: 8px !important;
+    }
+    .landing-navbar .action-btn {
+        padding: 0 12px !important;
+        font-size: 0.8rem !important;
+        height: 32px !important;
+    }
+    .landing-hero h1 {
+        font-size: 2.2rem !important;
+        line-height: 1.2 !important;
+    }
+    .landing-hero p {
+        font-size: 0.95rem !important;
+        margin-bottom: 24px !important;
+    }
+    .landing-hero {
+        padding: 100px 16px 60px 16px !important;
+    }
+}
+
+/* Sidebar Toggle Controls */
+.navbar-mobile-toggle {
+    display: none;
+}
+
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(3px);
+    z-index: 1050;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--transition-fast);
+}
+
+.sidebar-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+@media (max-width: 1024px) {
+    .navbar-mobile-toggle {
         display: flex;
-        flex-direction: column;
-        padding: 0;
-    }
-    
-    .sidebar-logo {
-        height: var(--header-height);
+        align-items: center;
         justify-content: center;
-        border-bottom: 1px solid var(--border-color);
-        width: 100%;
+        background: transparent;
+        border: none;
+        color: var(--text-primary);
+        font-size: 1.25rem;
+        cursor: pointer;
+        margin-right: 15px;
+    }
+
+    .app-sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: var(--sidebar-width);
+        transform: translateX(-100%);
+        transition: transform var(--transition-normal);
+        z-index: 1100;
+        box-shadow: 10px 0 30px rgba(0,0,0,0.15);
     }
     
-    .sidebar-menu {
-        flex-direction: row;
-        overflow-x: auto;
-        padding: 10px 16px;
-        gap: 8px;
-        justify-content: center;
-        border-bottom: 1px solid var(--border-color);
-    }
-    
-    .menu-item a {
-        padding: 8px 14px;
-        white-space: nowrap;
+    .app-sidebar.open {
+        transform: translateX(0);
     }
     
     #sidebar-sub-card {
-        display: none; /* Hide the bulky sidebar card from the mobile top layout */
+        margin: 10px 18px !important;
+        padding: 12px !important;
     }
-    
-    .sidebar-footer {
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px 24px;
-        border-top: none;
-        background-color: var(--card-bg);
-    }
-    
-    .user-badge {
-        gap: 8px;
-    }
-    
-    .user-name {
-        font-size: 0.8rem;
-    }
-    
-    .user-email {
-        display: none; /* Hide email on mobile to keep space clean */
-    }
-    
-    #btn-logout {
-        width: auto !important;
-        height: 32px !important;
-        margin: 0 !important;
-        font-size: 0.72rem !important;
-        padding: 0 14px !important;
-    }
-    
-    .app-content {
-        height: auto;
-        overflow: visible;
-    }
-    
+
     .app-navbar {
         height: 64px;
-        padding: 0 24px;
+        padding: 0 20px;
     }
     
     .navbar-title h1 {
-        font-size: 1.35rem;
+        font-size: 1.25rem;
     }
     
     .main-view-container {
-        padding: 24px 16px;
+        padding: 20px 16px;
     }
     
     body {
         overflow-y: auto;
     }
 }
+
+
 
 /* ==========================================================================
    Password Strength Indicator Styles

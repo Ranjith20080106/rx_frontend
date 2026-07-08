@@ -41,10 +41,10 @@ export default function HistoryPage() {
 
     return (
         <AppShell title="ATS Historical Analysis Logs">
-            <div className="card" style={{ maxWidth: '1100px', margin: '0 auto' }}>
+            <div className="card mobile-padding-card" style={{ maxWidth: '1100px', margin: '0 auto' }}>
                 <h3><i className="fa-solid fa-clock-rotate-left text-gradient"></i> Previous ATS Analyses</h3>
                 <p className="card-desc">Revisit and review the compatibility outputs and PDF downloads for all past resume optimization processes.</p>
-                
+
                 <div style={{ overflowX: 'auto' }}>
                     <table className="history-table">
                         <thead>

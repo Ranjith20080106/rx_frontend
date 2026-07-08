@@ -32,17 +32,17 @@ export default function ProfilePage() {
         );
     }
 
-    const initials = profile?.name ? 
-        profile.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : 
+    const initials = profile?.name ?
+        profile.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() :
         'U';
 
     return (
         <AppShell title="User Profile & Analytics">
             <div style={{ maxWidth: '900px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '28px' }}>
-                
+
                 {/* Profile Header card */}
                 {profile && (
-                    <div className="card" style={{ display: 'flex', alignItems: 'center', gap: '24px', padding: '32px' }}>
+                    <div className="card profile-header-card">
                         <div className="user-avatar" style={{ width: '76px', height: '76px', fontSize: '2.2rem', borderRadius: '18px' }} id="profile-avatar">
                             {initials}
                         </div>
@@ -71,7 +71,7 @@ export default function ProfilePage() {
                                 {profile.total_analyzed || 0}
                             </div>
                         </div>
-                        
+
                         {/* Metric 2 */}
                         <div className="card" style={{ textAlign: 'center', padding: '24px', marginBottom: 0 }}>
                             <i className="fa-solid fa-graduation-cap" style={{ fontSize: '2rem', color: 'var(--secondary-accent)', marginBottom: '12px', display: 'block' }}></i>
@@ -96,7 +96,7 @@ export default function ProfilePage() {
                 <div className="card">
                     <h3>Account & Safety Options</h3>
                     <p className="card-desc">Current environment running under local sandbox servers. All session hashes are compiled using industry standard JWT signatures.</p>
-                    <div style={{ display: 'flex', gap: '14px', marginTop: '14px' }}>
+                    <div style={{ display: 'flex', gap: '14px', marginTop: '14px', flexWrap: 'wrap' }}>
                         <button className="action-btn secondary-btn" style={{ cursor: 'pointer' }} onClick={() => alert('Password updates simulated successfully!')}>Change Password</button>
                         <button className="action-btn secondary-btn" style={{ cursor: 'pointer' }} onClick={() => alert('Audit logs reset successfully!')}>Reset Logs</button>
                     </div>

@@ -9,7 +9,7 @@ import { ApiService } from '@/utils/api';
 export default function AppShell({ children, title }) {
     const router = useRouter();
     const pathname = usePathname();
-    
+
     const [user, setUser] = useState(() => {
         if (typeof window !== 'undefined') {
             return AuthService.getUser();
@@ -24,12 +24,13 @@ export default function AppShell({ children, title }) {
         return 'dark-theme';
     });
     const [loading, setLoading] = useState(true);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     async function loadProfileData() {
         try {
             const data = await ApiService.fetchProfile();
             setStats(data);
-            
+
             // Sync user local cache if backend status changed
             const cachedUser = AuthService.getUser();
             if (cachedUser && cachedUser.is_premium !== data.is_premium) {
@@ -96,14 +97,17 @@ export default function AppShell({ children, title }) {
         );
     }
 
-    const initials = user?.name ? 
-        user.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : 
+    const initials = user?.name ?
+        user.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() :
         'U';
 
     return (
         <div className="app-shell">
+            {/* Sidebar Overlay Backdrop for Mobile */}
+            <div className={`sidebar-overlay ${isSidebarOpen ? 'active' : ''}`} onClick={() => setIsSidebarOpen(false)}></div>
+
             {/* Sidebar Navigation */}
-            <aside className="app-sidebar">
+            <aside className={`app-sidebar ${isSidebarOpen ? 'open' : ''}`}>
                 <div className="sidebar-logo">
                     <div className="logo-icon">
                         <i className="fa-solid fa-wand-magic-sparkles"></i>
@@ -112,19 +116,19 @@ export default function AppShell({ children, title }) {
                         <h2>Resume<span>X</span></h2>
                     </div>
                 </div>
-                
+
                 <ul className="sidebar-menu">
                     <li className={`menu-item ${pathname === '/dashboard' ? 'active' : ''}`}>
-                        <Link href="/dashboard"><i className="fa-solid fa-table-columns"></i> Dashboard</Link>
+                        <Link href="/dashboard" onClick={() => setIsSidebarOpen(false)}><i className="fa-solid fa-table-columns"></i> Dashboard</Link>
                     </li>
                     <li className={`menu-item ${pathname === '/history' ? 'active' : ''}`}>
-                        <Link href="/history"><i className="fa-solid fa-clock-rotate-left"></i> History Log</Link>
+                        <Link href="/history" onClick={() => setIsSidebarOpen(false)}><i className="fa-solid fa-clock-rotate-left"></i> History Log</Link>
                     </li>
                     <li className={`menu-item ${pathname === '/profile' ? 'active' : ''}`}>
-                        <Link href="/profile"><i className="fa-solid fa-user-tie"></i> Profile Stats</Link>
+                        <Link href="/profile" onClick={() => setIsSidebarOpen(false)}><i className="fa-solid fa-user-tie"></i> Profile Stats</Link>
                     </li>
                 </ul>
-                
+
                 {/* Subscription Info Card in Sidebar */}
                 {stats && (
                     <div className="sidebar-card" id="sidebar-sub-card" style={{ margin: '20px 18px', padding: '16px', borderRadius: 'var(--border-radius-sm)', border: '1px solid var(--border-color)', backgroundColor: 'var(--card-bg)' }}>
@@ -148,13 +152,13 @@ export default function AppShell({ children, title }) {
                             )}
                         </div>
                         {!stats.is_premium && (
-                            <Link href="/subscription" className="action-btn primary-btn" id="btn-sidebar-upgrade" style={{ width: '100%', height: '32px', fontSize: '0.72rem', marginTop: '12px', padding: 0, display: 'flex', textDecoration: 'none' }}>
+                            <Link href="/subscription" className="action-btn primary-btn" id="btn-sidebar-upgrade" onClick={() => setIsSidebarOpen(false)} style={{ width: '100%', height: '32px', fontSize: '0.72rem', marginTop: '12px', padding: 0, display: 'flex', textDecoration: 'none' }}>
                                 Upgrade to Premium
                             </Link>
                         )}
                     </div>
                 )}
-                
+
                 <div className="sidebar-footer">
                     <div className="user-badge">
                         <div className="user-avatar" id="nav-user-avatar">{initials}</div>
@@ -163,7 +167,7 @@ export default function AppShell({ children, title }) {
                             <div className="user-email" id="nav-user-email">{user?.email || ''}</div>
                         </div>
                     </div>
-                    <button className="action-btn secondary-btn" id="btn-logout" onClick={handleLogout} style={{ width: '100%', height: '38px' }}>
+                    <button className="action-btn secondary-btn" id="btn-logout" onClick={() => { handleLogout(); setIsSidebarOpen(false); }} style={{ width: '100%', height: '38px' }}>
                         <i className="fa-solid fa-right-from-bracket"></i> Logout
                     </button>
                 </div>
@@ -173,7 +177,10 @@ export default function AppShell({ children, title }) {
             <div className="app-content">
                 {/* Navbar Header */}
                 <header className="app-navbar">
-                    <div className="navbar-title">
+                    <div className="navbar-title" style={{ display: 'flex', alignItems: 'center' }}>
+                        <button className="navbar-mobile-toggle" onClick={() => setIsSidebarOpen(true)} title="Open Menu">
+                            <i className="fa-solid fa-bars"></i>
+                        </button>
                         <h1>{title}</h1>
                     </div>
                     <div className="navbar-controls">

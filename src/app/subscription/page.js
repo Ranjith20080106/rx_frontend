@@ -14,9 +14,9 @@ export default function SubscriptionPage() {
                     Unlock production-grade AI keyword gap optimizations, custom cover letter builds, and PDF reports downloads.
                 </p>
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '28px', alignItems: 'stretch' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '28px', alignItems: 'stretch' }}>
                     {/* Free Plan Card */}
-                    <div className="card" style={{ display: 'flex', flexDirection: 'column', height: '100%', marginBottom: 0 }}>
+                    <div className="card mobile-padding-card" style={{ display: 'flex', flexDirection: 'column', height: '100%', marginBottom: 0 }}>
                         <div style={{ marginBottom: '20px' }}>
                             <h3 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '6px' }}>Free Basic</h3>
                             <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Initial sandbox testing tier</p>
@@ -48,11 +48,11 @@ export default function SubscriptionPage() {
                     </div>
 
                     {/* Premium Plan Card */}
-                    <div className="card" style={{ display: 'flex', flexDirection: 'column', height: '100%', borderColor: 'var(--primary-glow)', boxShadow: 'var(--shadow-premium), var(--shadow-glow)', position: 'relative', marginBottom: 0 }}>
+                    <div className="card mobile-padding-card" style={{ display: 'flex', flexDirection: 'column', height: '100%', borderColor: 'var(--primary-glow)', boxShadow: 'var(--shadow-premium), var(--shadow-glow)', position: 'relative', marginBottom: 0 }}>
                         <div style={{ position: 'absolute', top: '16px', right: '16px' }}>
                             <span className="badge-tag gold" style={{ fontSize: '0.65rem', padding: '4px 10px', fontWeight: 700 }}>Most Popular</span>
                         </div>
-                        
+
                         <div style={{ marginBottom: '20px' }}>
                             <h3 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '6px', color: 'var(--primary-glow)' }}>Monthly Premium</h3>
                             <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>For active job hunters</p>

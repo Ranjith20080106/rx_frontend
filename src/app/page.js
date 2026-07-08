@@ -35,7 +35,7 @@ export default function LandingPage() {
         <p className="staggered-fade-2" style={{ fontFamily: 'var(--font-body)', fontWeight: 400, fontSize: '1.15rem', color: 'var(--text-secondary)', maxWidth: '650px', marginTop: '10px' }}>
           Upload your resume, paste your target job description, and leverage advanced sentence embeddings to optimize your ATS score, fill keyword gaps, and generate tailored cover letters instantly.
         </p>
-        <div className="staggered-fade-3" style={{ display: 'flex', gap: '16px', marginTop: '20px' }}>
+        <div className="staggered-fade-3" style={{ display: 'flex', gap: '16px', marginTop: '20px', flexWrap: 'wrap', justifyContent: 'center' }}>
           <Link href="/login" className="action-btn primary-btn">
             <i className="fa-solid fa-rocket"></i> Analyze Resume Now
           </Link>
@@ -46,7 +46,7 @@ export default function LandingPage() {
       </section>
 
       {/* SaaS Features Grid */}
-      <section style={{ maxWidth: '1200px', margin: '-40px auto 80px auto', padding: '0 24px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px', width: '100%' }}>
+      <section className="landing-features-grid">
         <div className="card" style={{ marginBottom: 0 }}>
           <i className="fa-solid fa-magnifying-glass-chart" style={{ fontSize: '2rem', color: 'var(--secondary-accent)', marginBottom: '15px', display: 'block' }}></i>
           <h3>ATS Cosine Similarity Scorer</h3>
@@ -70,7 +70,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <footer style={{ textAlign: 'center', padding: '40px', borderTop: '1px solid var(--border-color)', fontSize: '0.82rem', color: 'var(--text-muted)', backgroundColor: 'var(--sidebar-bg)', marginTop: 'auto' }}>
+      <footer className="landing-footer">
         <p>© 2026 ResumeX. Developed using FastAPI, PostgreSQL, and Next.js. All Rights Reserved.</p>
       </footer>
     </div>
