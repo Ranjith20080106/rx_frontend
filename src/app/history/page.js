@@ -28,7 +28,7 @@ export default function HistoryPage() {
 
     const downloadPDF = (id) => {
         try {
-            window.location.href = `${ApiService.API_BASE_URL}/download-report/${id}?token=${AuthService.getToken()}`;
+            window.open(`${ApiService.API_BASE_URL}/download-report/${id}?token=${AuthService.getToken()}`, '_self');
         } catch (err) {
             alert("Failed to download PDF report.");
         }

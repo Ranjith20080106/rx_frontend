@@ -10,7 +10,7 @@ function LoginContent() {
     const searchParams = useSearchParams();
 
     // Tab state: 'login' or 'register'
-    const [activeTab, setActiveTab] = useState('login');
+    const [activeTab, setActiveTab] = useState(() => searchParams.get('tab') === 'register' ? 'register' : 'login');
 
     // Input States
     const [loginEmail, setLoginEmail] = useState('');
@@ -33,13 +33,7 @@ function LoginContent() {
         if (AuthService.isAuthenticated()) {
             router.push('/dashboard');
         }
-
-        // Auto-switch tab based on query param
-        const tab = searchParams.get('tab');
-        if (tab === 'register') {
-            setActiveTab('register');
-        }
-    }, [searchParams, router]);
+    }, [router]);
 
     const displayToast = (msg) => {
         setToastMessage(msg);

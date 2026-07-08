@@ -1,7 +1,7 @@
 import { AuthService } from './auth';
 
 export class ApiService {
-    static API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+    static API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://rx-backend.vercel.app/api';
 
     static getHeaders() {
         const token = AuthService.getToken();

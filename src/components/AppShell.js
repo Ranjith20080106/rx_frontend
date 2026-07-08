@@ -10,31 +10,22 @@ export default function AppShell({ children, title }) {
     const router = useRouter();
     const pathname = usePathname();
     
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState(() => {
+        if (typeof window !== 'undefined') {
+            return AuthService.getUser();
+        }
+        return null;
+    });
     const [stats, setStats] = useState(null);
-    const [theme, setTheme] = useState('dark-theme'); // default theme
+    const [theme, setTheme] = useState(() => {
+        if (typeof window !== 'undefined') {
+            return localStorage.getItem('resumex_theme') || 'dark-theme';
+        }
+        return 'dark-theme';
+    });
     const [loading, setLoading] = useState(true);
 
-    // 1. Initial Authentication Check & Theme Loading
-    useEffect(() => {
-        if (!AuthService.isAuthenticated()) {
-            router.push('/login');
-            return;
-        }
-
-        // Get cached user session
-        setUser(AuthService.getUser());
-
-        // Load theme preferences
-        const savedTheme = localStorage.getItem('resumex_theme') || 'dark-theme';
-        setTheme(savedTheme);
-        document.body.className = savedTheme;
-
-        // Fetch server profile details
-        loadProfileData();
-    }, [router]);
-
-    const loadProfileData = async () => {
+    async function loadProfileData() {
         try {
             const data = await ApiService.fetchProfile();
             setStats(data);
@@ -52,7 +43,27 @@ export default function AppShell({ children, title }) {
         } finally {
             setLoading(false);
         }
-    };
+    }
+
+    // Apply theme changes to document body
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            document.body.className = theme;
+        }
+    }, [theme]);
+
+    // 1. Initial Authentication Check & Profile Loading
+    useEffect(() => {
+        if (!AuthService.isAuthenticated()) {
+            router.push('/login');
+            return;
+        }
+
+        // Fetch server profile details
+        setTimeout(() => {
+            loadProfileData();
+        }, 0);
+    }, [router]);
 
     // 2. Theme Toggle Action
     const toggleTheme = () => {

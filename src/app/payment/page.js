@@ -49,6 +49,7 @@ export default function PaymentPage() {
                 {/* QR Code Container */}
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px', margin: '20px 0' }}>
                     <div style={{ padding: '16px', backgroundColor: '#ffffff', borderRadius: 'var(--border-radius-md)', border: '1px solid var(--border-color)', boxShadow: 'var(--shadow-glow)' }}>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img 
                             src={qrCodeUrl} 
                             alt="UPI QR Code" 

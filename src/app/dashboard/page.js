@@ -18,7 +18,10 @@ export default function Dashboard() {
     const [selectedFile, setSelectedFile] = useState(null);
     const [selectedRole, setSelectedRole] = useState('');
     const [jobDescription, setJobDescription] = useState('');
-    const [jdCounts, setJdCounts] = useState({ words: 0, characters: 0 });
+    // Derived values
+    const charCount = jobDescription.length;
+    const wordCount = jobDescription.trim() === '' ? 0 : jobDescription.trim().split(/\s+/).length;
+
     const [isAnalyzing, setIsAnalyzing] = useState(false);
 
     // Report Output states
@@ -41,6 +44,38 @@ export default function Dashboard() {
         }, 3200);
     };
 
+    // Load a report directly
+    async function loadHistoricalReportDirectly(id) {
+        setIsAnalyzing(true);
+        try {
+            const history = await ApiService.fetchHistory();
+            const reportData = history.find(r => r.id === id);
+            if (reportData) {
+                setReport(reportData);
+                displayToast("Historical report loaded successfully.");
+            } else {
+                throw new Error("Report details not found in history logs.");
+            }
+        } catch (e) {
+            displayToast(`Error opening report: ${e.message}`);
+        } finally {
+            setIsAnalyzing(false);
+        }
+    }
+
+    // Auto-load latest report
+    async function loadLatestReportAutomatically() {
+        try {
+            const history = await ApiService.fetchHistory();
+            if (history && history.length > 0) {
+                // history is sorted desc (latest first)
+                setReport(history[0]);
+            }
+        } catch (e) {
+            console.warn("Failed to auto-load latest report:", e);
+        }
+    }
+
     // 1. Monitor Redirects and Auto-Load Session History
     useEffect(() => {
         // Check for success subscription redirect
@@ -57,50 +92,16 @@ export default function Dashboard() {
         const viewReportId = sessionStorage.getItem('view_report_id');
         if (viewReportId) {
             sessionStorage.removeItem('view_report_id'); // clear key
-            loadHistoricalReportDirectly(viewReportId);
+            setTimeout(() => {
+                loadHistoricalReportDirectly(viewReportId);
+            }, 0);
         } else {
-            loadLatestReportAutomatically();
+            setTimeout(() => {
+                loadLatestReportAutomatically();
+            }, 0);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
-    // 2. JD Character and Word Counter sync
-    useEffect(() => {
-        const charCount = jobDescription.length;
-        const wordCount = jobDescription.trim() === '' ? 0 : jobDescription.trim().split(/\s+/).length;
-        setJdCounts({ words: wordCount, characters: charCount });
-    }, [jobDescription]);
-
-    // Load a report directly
-    const loadHistoricalReportDirectly = async (id) => {
-        setIsAnalyzing(true);
-        try {
-            const history = await ApiService.fetchHistory();
-            const reportData = history.find(r => r.id === id);
-            if (reportData) {
-                setReport(reportData);
-                displayToast("Historical report loaded successfully.");
-            } else {
-                throw new Error("Report details not found in history logs.");
-            }
-        } catch (e) {
-            displayToast(`Error opening report: ${e.message}`);
-        } finally {
-            setIsAnalyzing(false);
-        }
-    };
-
-    // Auto-load latest report
-    const loadLatestReportAutomatically = async () => {
-        try {
-            const history = await ApiService.fetchHistory();
-            if (history && history.length > 0) {
-                // history is sorted desc (latest first)
-                setReport(history[0]);
-            }
-        } catch (e) {
-            console.warn("Failed to auto-load latest report:", e);
-        }
-    };
 
     // 3. Drag and Drop Actions
     const handleFileChange = (e) => {
@@ -194,7 +195,7 @@ export default function Dashboard() {
     const downloadPdfReport = () => {
         if (!report?.id) return;
         displayToast("Opening report PDF document download...");
-        window.location.href = `${ApiService.API_BASE_URL}/download-report/${report.id}?token=${AuthService.getToken()}`;
+        window.open(`${ApiService.API_BASE_URL}/download-report/${report.id}?token=${AuthService.getToken()}`, '_self');
     };
 
     // AI Resume Improvement Handlers
@@ -399,8 +400,8 @@ export default function Dashboard() {
                                 onChange={(e) => setJobDescription(e.target.value)}
                             ></textarea>
                             <div className="textarea-footer" style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '4px' }}>
-                                <span id="jd-word-count">Words: {jdCounts.words}</span>
-                                <span id="jd-char-count">{jdCounts.characters} / 4000 characters</span>
+                                <span id="jd-word-count">Words: {wordCount}</span>
+                                <span id="jd-char-count">{charCount} / 4000 characters</span>
                             </div>
                         </div>
                     </div>
